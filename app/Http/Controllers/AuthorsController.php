@@ -4,17 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Author;
 use App\Http\Requests\StoreAuthorRequest;
+use App\Services\AuthorsService;
 
 
 class AuthorsController extends Controller
 {
+
+    protected $authors_service;
+
+    public function __construct(AuthorsService $authors_service)
+    {
+        $this->authors_service = $authors_service;
+    }
+
+
     public function store(StoreAuthorRequest $request)
     {
     	$data = $request->all();
 
-    	$model = new Author();
-    	$model->fill($data);
-    	$model->save();
+    	$this->authors_service->store($data);
 
     	return response()->json([
     		'success' =>true
